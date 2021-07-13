@@ -4,16 +4,21 @@
     color: white;
 }
 
-.timelineDiv {
+.timeline-div {
     display: flex;
-    padding-top: 50px;
+    margin: auto;
+    width: 100%;
+    padding-top: 20px;
+    border: 2px solid white;
 }
 
 .target {
     align-self: flex-end;
+    color: white,
 }
 
 .popover {
     background-color: white;
+    padding: 5px;
     color: black;
 }

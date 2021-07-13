@@ -13,33 +13,33 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-// const grid = classDuration.length;
-const grid = 8;
+const hotspotType = timelineArray.map(item => {
+  return item.hotspot
+})
+const whatBorder = (hotspotType === 'Warmup') ? 'yellow' : 'red';
+
 
 const getItemStyle = (isDragging, draggableStyle, resistance, hotspot, duration) => ({
   userSelect: 'none',
-  padding: grid * 2,
-  margin: 'auto',
+  padding: '10px',
   // border: '1px solid {(hotspot == 'Warmup') ? 'yellow' : 'red'}',
   // border: '1px solid {if (hotspot == 'Warmup') {'yellow'} elseif (hotspot == 'Strength') {'red'} else {'blue'} }',
-  border: `1px solid white`,
+  border: `1px solid ${whatBorder}`,
   background: isDragging ? 'lightblue' : `orange`,
   height: `${resistance}0px`,
   width: `${duration}px`,
   // width: '2px',
-  color: 'white',
   ...draggableStyle,
 });
 
 const getListStyle = isDraggingOver => ({
-  margin: "auto",
-  width: '75%',
-  width: `${classDuration}px`,
+  width: '100%',
+  // width: `${classDuration}px`,
   background: isDraggingOver ? 'lightgrey' : 'black',
   display: 'flex',
-  padding: grid,
+  justifyContent: 'center',
+  padding: '10px',
   overflow: 'auto',
-  textAlign: 'center',
 });
 
 class App extends Component {
@@ -116,7 +116,9 @@ class App extends Component {
                         item.duration
                       )}
                     >
+                      <div className="hover-point">
                       {/* {item.hotspot} <br /> */}
+                      </div>
                     </div>
                   )}
                 </Draggable>
