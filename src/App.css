@@ -1,0 +1,19 @@
+* {
+    background-color: black;
+    font: arial;
+    color: white;
+}
+
+.timelineDiv {
+    display: flex;
+    padding-top: 50px;
+}
+
+.target {
+    align-self: flex-end;
+}
+
+.popover {
+    background-color: white;
+    color: black;
+}

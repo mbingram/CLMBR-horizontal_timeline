@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import './App.css'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { timelineArray, classDuration } from './hotspotsData';
 import { Popover } from 'react-tiny-popover'
@@ -15,40 +16,25 @@ const reorder = (list, startIndex, endIndex) => {
 // const grid = classDuration.length;
 const grid = 8;
 
-const resistance = timelineArray.map(item => {
-  return item.resistance
-});
-const duration = timelineArray.map(item => {
-  return item.duration
-})
-const hotspotType = timelineArray.map(item => {
-  return item.hotspot
-})
-const getHotspotType = (hotspotType == 'Warmup') ? 'yellow' : 'red'
-// console.log(hotspotType)
-const getResistance = (resistance > 5) ? 'orange' : 'lightgrey'
-
-
-const getItemStyle = (isDragging, draggableStyle) => ({
+const getItemStyle = (isDragging, draggableStyle, resistance, hotspot, duration) => ({
   userSelect: 'none',
   padding: grid * 2,
   margin: 'auto',
-  border: `1px solid ${getHotspotType}`,
-  background: isDragging ? 'lightblue' : `${getResistance}`,
-  height: `${resistance}px`,
-  // width: `${duration}px`,
-  width: '2px',
+  // border: '1px solid {(hotspot == 'Warmup') ? 'yellow' : 'red'}',
+  // border: '1px solid {if (hotspot == 'Warmup') {'yellow'} elseif (hotspot == 'Strength') {'red'} else {'blue'} }',
+  border: `1px solid white`,
+  background: isDragging ? 'lightblue' : `orange`,
+  height: `${resistance}0px`,
+  width: `${duration}px`,
+  // width: '2px',
   color: 'white',
-  display: 'block',
   ...draggableStyle,
 });
-
-const timelineLength = timelineArray.length
 
 const getListStyle = isDraggingOver => ({
   margin: "auto",
   width: '75%',
-  // width: `${timelineLength}px`,
+  width: `${classDuration}px`,
   background: isDraggingOver ? 'lightgrey' : 'black',
   display: 'flex',
   padding: grid,
@@ -97,14 +83,26 @@ class App extends Component {
 
                 <Popover
                   isOpen={this.state.isPopoverOpen}
-                  positions={['top', 'bottom', 'left', 'right']} // preferred positions by priority
-                  content={<div>Hi! I'm popover content.</div>}
+                  positions={['top', 'bottom', 'left', 'right']}
+                  content={<div className="popover">
+                    {item.hotspot} <br />
+                    {/* {item.tempo} <br />
+                    {item.reach} <br />
+                    {item.resistance} <br />
+                    {item.duration} */}
+                  </div>}
                 >
+                <div className="target">
                 <Draggable key={item.id} draggableId={item.id} index={index}>
                   {(provided, snapshot) => (
                     <div
-                      onClick={() => {
-                        console.log(this.state.isPopoverOpen)
+                      onMouseOver={() => {
+                        this.setState({isPopoverOpen: !this.state.isPopoverOpen})
+                      }}
+                      onMouseOut={() => {
+                        this.setState({isPopoverOpen: !this.state.isPopoverOpen})
+                      }}
+                      onTouchEnd={() => {
                         this.setState({isPopoverOpen: !this.state.isPopoverOpen})
                       }}
                       ref={provided.innerRef}
@@ -112,13 +110,17 @@ class App extends Component {
                       {...provided.dragHandleProps}
                       style={getItemStyle(
                         snapshot.isDragging,
-                        provided.draggableProps.style
+                        provided.draggableProps.style,
+                        item.resistance,
+                        item.hotspot,
+                        item.duration
                       )}
                     >
-                      {item.hotspot} <br />
+                      {/* {item.hotspot} <br /> */}
                     </div>
                   )}
                 </Draggable>
+                </div>
                 </Popover>
 
               ))}

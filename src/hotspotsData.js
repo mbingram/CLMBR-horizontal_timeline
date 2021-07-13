@@ -1,4 +1,4 @@
-export const classDuration = 300;
+export const classDuration = 870;
 export const timelineArray = [
     { id: 'warmup-1', hotspot: 'Warmup', tempo: '40', reach: 15, resistance: 4, duration: 30 },
     { id: 'warmup-2', hotspot: 'Warmup', tempo: '60', reach: 15, resistance: 4, duration: 30 },
