@@ -1,24 +1,32 @@
 * {
     background-color: black;
-    font: arial;
+    font-family: arial;
     color: white;
 }
 
+/* .everything {
+    position: relative;
+} */
+
 .timeline-div {
     display: flex;
-    margin: auto;
+    margin-top: 100px;
     width: 100%;
-    padding-top: 20px;
+    padding-top: 100px;
     border: 2px solid white;
+    /* position: absolute; */
 }
 
 .target {
     align-self: flex-end;
-    color: white,
+    padding: 1px;
 }
 
 .popover {
     background-color: white;
     padding: 5px;
     color: black;
+    text-align: center;
+    border: 1px solid rgb(151, 151, 255);
+    border-radius: 10%;
 }

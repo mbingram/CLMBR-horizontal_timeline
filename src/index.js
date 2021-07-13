@@ -13,29 +13,21 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-const hotspotType = timelineArray.map(item => {
-  return item.hotspot
-})
-const whatBorder = (hotspotType === 'Warmup') ? 'yellow' : 'red';
-
-
 const getItemStyle = (isDragging, draggableStyle, resistance, hotspot, duration) => ({
   userSelect: 'none',
   padding: '10px',
-  // border: '1px solid {(hotspot == 'Warmup') ? 'yellow' : 'red'}',
-  // border: '1px solid {if (hotspot == 'Warmup') {'yellow'} elseif (hotspot == 'Strength') {'red'} else {'blue'} }',
-  border: `1px solid ${whatBorder}`,
-  background: isDragging ? 'lightblue' : `orange`,
+  border: `2px solid ${hotspot === 'Warmup' ? 'orange' : hotspot === 'Cooldown' ? 'lightblue' : hotspot === 'Stretch' ? 'yellow' : 'red' }`,
+  background: isDragging ? 'orange' : 'rgb(41, 43, 199)',
   height: `${resistance}0px`,
   width: `${duration}px`,
-  // width: '2px',
   ...draggableStyle,
 });
 
 const getListStyle = isDraggingOver => ({
   width: '100%',
   // width: `${classDuration}px`,
-  background: isDraggingOver ? 'lightgrey' : 'black',
+  // background: isDraggingOver ? 'lightgrey' : 'black',
+  background: 'black',
   display: 'flex',
   justifyContent: 'center',
   padding: '10px',
@@ -70,69 +62,71 @@ class App extends Component {
 
   render() {
     return (
-      <div className="timeline-div">
-        <DragDropContext onDragEnd={this.onDragEnd}>
-        <Droppable droppableId="droppable" direction="horizontal">
-          {(provided, snapshot) => (
-            <div
-              ref={provided.innerRef}
-              style={getListStyle(snapshot.isDraggingOver)}
-              {...provided.droppableProps}
-            >
-              {this.state.items.map((item, index) => (
-
-                <Popover
-                  isOpen={this.state.isPopoverOpen}
-                  positions={['top', 'bottom', 'left', 'right']}
-                  content={<div className="popover">
-                    {item.hotspot} <br />
-                    {/* {item.tempo} <br />
-                    {item.reach} <br />
-                    {item.resistance} <br />
-                    {item.duration} */}
-                  </div>}
+      <div className="everything">
+        <h1>GUIDED CLIMB TIMELINE</h1>
+        <div className="timeline-div">
+          <DragDropContext onDragEnd={this.onDragEnd}>
+            <Droppable droppableId="droppable" direction="horizontal" >
+              {(provided, snapshot) => (
+                <div
+                  ref={provided.innerRef}
+                  style={getListStyle(snapshot.isDraggingOver)}
+                  {...provided.droppableProps}
                 >
-                <div className="target">
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      onMouseOver={() => {
-                        this.setState({isPopoverOpen: !this.state.isPopoverOpen})
-                      }}
-                      onMouseOut={() => {
-                        this.setState({isPopoverOpen: !this.state.isPopoverOpen})
-                      }}
-                      onTouchEnd={() => {
-                        this.setState({isPopoverOpen: !this.state.isPopoverOpen})
-                      }}
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style,
-                        item.resistance,
-                        item.hotspot,
-                        item.duration
-                      )}
+                  {this.state.items.map((item, index) => (
+                    <Popover
+                      isOpen={this.state.isPopoverOpen}
+                      positions={['top', 'bottom', 'left', 'right']}
+                      content={
+                        <div className="popover">
+                          {item.hotspot} <br />
+                          {/* {item.tempo} <br />
+                          {item.reach} <br />
+                          {item.resistance} <br /> */}
+                          :{item.duration}
+                        </div>}
                     >
-                      <div className="hover-point">
-                      {/* {item.hotspot} <br /> */}
+                      <div className="target">
+                        <Draggable key={item.id} draggableId={item.id} index={index}>
+                          {(provided, snapshot) => (
+                            <div
+                              onMouseOver={() => {
+                                this.setState({ isPopoverOpen: !this.state.isPopoverOpen })
+                              }}
+                              onMouseOut={() => {
+                                this.setState({ isPopoverOpen: !this.state.isPopoverOpen })
+                              }}
+                              onTouchEnd={() => {
+                                this.setState({ isPopoverOpen: !this.state.isPopoverOpen })
+                              }}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={getItemStyle(
+                                snapshot.isDragging,
+                                provided.draggableProps.style,
+                                item.resistance,
+                                item.hotspot,
+                                item.duration
+                              )}
+                            >
+                              <div className="hover-point">
+                                
+                              </div>
+                            </div>
+                          )}
+                        </Draggable>
                       </div>
-                    </div>
-                  )}
-                </Draggable>
-                </div>
-                </Popover>
+                    </Popover>
 
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>
       </div>
-      
     );
   }
 }
