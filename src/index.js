@@ -25,7 +25,7 @@ const hotspotType = timelineArray.map(item => {
   return item.hotspot
 })
 const getHotspotType = (hotspotType == 'Warmup') ? 'yellow' : 'red'
-console.log(hotspotType)
+// console.log(hotspotType)
 const getResistance = (resistance > 5) ? 'orange' : 'lightgrey'
 
 
@@ -61,6 +61,7 @@ class App extends Component {
     super(props);
     this.state = {
       items: timelineArray,
+      isPopoverOpen: false,
     };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
@@ -94,9 +95,18 @@ class App extends Component {
             >
               {this.state.items.map((item, index) => (
 
+                <Popover
+                  isOpen={this.state.isPopoverOpen}
+                  positions={['top', 'bottom', 'left', 'right']} // preferred positions by priority
+                  content={<div>Hi! I'm popover content.</div>}
+                >
                 <Draggable key={item.id} draggableId={item.id} index={index}>
                   {(provided, snapshot) => (
                     <div
+                      onClick={() => {
+                        console.log(this.state.isPopoverOpen)
+                        this.setState({isPopoverOpen: !this.state.isPopoverOpen})
+                      }}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
@@ -109,6 +119,8 @@ class App extends Component {
                     </div>
                   )}
                 </Draggable>
+                </Popover>
+
               ))}
               {provided.placeholder}
             </div>
