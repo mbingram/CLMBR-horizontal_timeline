@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { timelineArray, classDuration } from './hotspotsData';
+import { Popover } from 'react-tiny-popover'
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
@@ -26,20 +27,28 @@ console.log(resistance, duration)
 const getItemStyle = (isDragging, draggableStyle, item) => ({
   userSelect: 'none',
   padding: grid * 2,
-  margin: `0 ${grid}px 0 0`,
+  margin: 'auto',
   background: isDragging ? 'lightgreen' : 'grey',
   // background: (resistance > 5) ? 'orange' : 'green',
   height: `${resistance}px`,
-  width: `${duration}px`,
+  // width: `${duration}px`,
+  width: '2px',
   color: 'white',
+  display: 'block',
   ...draggableStyle,
 });
 
+const timelineLength = timelineArray.length
+
 const getListStyle = isDraggingOver => ({
+  margin: "auto",
+  width: '75%',
+  // width: `${timelineLength}px`,
   background: isDraggingOver ? 'lightblue' : 'lightgrey',
   display: 'flex',
   padding: grid,
   overflow: 'auto',
+  textAlign: 'center',
 });
 
 class App extends Component {
@@ -70,7 +79,8 @@ class App extends Component {
 
   render() {
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
+      <div className="timeline-div">
+        <DragDropContext onDragEnd={this.onDragEnd}>
         <Droppable droppableId="droppable" direction="horizontal">
           {(provided, snapshot) => (
             <div
@@ -91,7 +101,6 @@ class App extends Component {
                       )}
                     >
                       {item.id} <br />
-                      {item.duration} seconds
                     </div>
                   )}
                 </Draggable>
@@ -101,6 +110,8 @@ class App extends Component {
           )}
         </Droppable>
       </DragDropContext>
+      </div>
+      
     );
   }
 }
