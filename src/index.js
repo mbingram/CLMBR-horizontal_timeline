@@ -4,7 +4,6 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { timelineArray, classDuration } from './hotspotsData';
 import { Popover } from 'react-tiny-popover'
 
-// a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
@@ -13,7 +12,7 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-// const grid = classDuration;
+// const grid = classDuration.length;
 const grid = 8;
 
 const resistance = timelineArray.map(item => {
@@ -22,14 +21,20 @@ const resistance = timelineArray.map(item => {
 const duration = timelineArray.map(item => {
   return item.duration
 })
-console.log(resistance, duration)
+const hotspotType = timelineArray.map(item => {
+  return item.hotspot
+})
+const getHotspotType = (hotspotType == 'Warmup') ? 'yellow' : 'red'
+console.log(hotspotType)
+const getResistance = (resistance > 5) ? 'orange' : 'lightgrey'
 
-const getItemStyle = (isDragging, draggableStyle, item) => ({
+
+const getItemStyle = (isDragging, draggableStyle) => ({
   userSelect: 'none',
   padding: grid * 2,
   margin: 'auto',
-  background: isDragging ? 'lightgreen' : 'grey',
-  // background: (resistance > 5) ? 'orange' : 'green',
+  border: `1px solid ${getHotspotType}`,
+  background: isDragging ? 'lightblue' : `${getResistance}`,
   height: `${resistance}px`,
   // width: `${duration}px`,
   width: '2px',
@@ -44,7 +49,7 @@ const getListStyle = isDraggingOver => ({
   margin: "auto",
   width: '75%',
   // width: `${timelineLength}px`,
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
+  background: isDraggingOver ? 'lightgrey' : 'black',
   display: 'flex',
   padding: grid,
   overflow: 'auto',
@@ -61,7 +66,6 @@ class App extends Component {
   }
 
   onDragEnd(result) {
-    // dropped outside the list
     if (!result.destination) {
       return;
     }
@@ -89,6 +93,7 @@ class App extends Component {
               {...provided.droppableProps}
             >
               {this.state.items.map((item, index) => (
+
                 <Draggable key={item.id} draggableId={item.id} index={index}>
                   {(provided, snapshot) => (
                     <div
@@ -100,7 +105,7 @@ class App extends Component {
                         provided.draggableProps.style
                       )}
                     >
-                      {item.id} <br />
+                      {item.hotspot} <br />
                     </div>
                   )}
                 </Draggable>
@@ -116,5 +121,4 @@ class App extends Component {
   }
 }
 
-// Put the thing into the DOM!
 ReactDOM.render(<App />, document.getElementById('root'));
